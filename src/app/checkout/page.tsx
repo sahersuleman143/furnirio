@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../contexts/CartContext';
-import { client } from '@/sanity/lib/client'; // ✅ Corrected import
+import { client } from '@/sanity/lib/client';
 import "./checkout.css";
 
 const CheckoutPage = () => {
@@ -11,7 +11,6 @@ const CheckoutPage = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
-  // ✅ State for user input
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -29,20 +28,15 @@ const CheckoutPage = () => {
     return null;
   }
 
-  // ✅ Calculate total amount
-  const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  // ✅ Fix: Explicitly define the type of acc as a number
+  const totalAmount = cart.reduce((acc: number, item: { price: number; quantity: number; }) => acc + item.price * item.quantity, 0);
 
-  // ✅ Handle user input
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle order placement
   const handlePlaceOrder = async () => {
     try {
-      console.log("Placing order...");
-      console.log("Sanity Token:", process.env.SANITY_API_TOKEN); // ✅ Debugging token issue
-
       if (!process.env.SANITY_API_TOKEN) {
         alert("Error: Sanity API token is missing. Please check your .env.local file.");
         return;
@@ -56,15 +50,13 @@ const CheckoutPage = () => {
         postalCode: formData.postalCode,
         phone: formData.phone,
         email: formData.email,
-        cartItems: cart.map((item) => ({
+        cartItems: cart.map((item: { name: any; price: any; quantity: any; }) => ({
           name: item.name,
           price: item.price,
           quantity: item.quantity,
         })),
         totalAmount,
       };
-
-      console.log("Order Data:", orderData);
 
       const response = await client.create(orderData);
       console.log("Order placed successfully:", response);
@@ -83,7 +75,7 @@ const CheckoutPage = () => {
         <h2>Your Cart Items:</h2>
         {cart.length > 0 ? (
           <ul>
-            {cart.map((item, index) => (
+            {cart.map((item: { name: string; price: number; quantity: number }, index) => (
               <li key={index} className="cart-item">
                 {item.name} - ${item.price} x {item.quantity}
               </li>
