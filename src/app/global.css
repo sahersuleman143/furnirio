@@ -1,0 +1,24 @@
+/* General Styles */
+body {
+  font-family: "Arial", sans-serif;
+}
+
+/* Product Page Styling */
+.aspect-square {
+  width: 100%;
+  padding-top: 100%; /* Maintains square aspect ratio */
+  position: relative;
+}
+
+.aspect-square img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+button {
+  cursor: pointer;
+}

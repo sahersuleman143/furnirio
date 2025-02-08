@@ -1,0 +1,118 @@
+/* Body background and text styling */
+.shop-section {
+  padding: 2rem;
+  background-color: #1a1a2e; /* Dark theme background */
+  color: #cbd5e0;
+  font-family: Arial, sans-serif;
+}
+
+/* Container */
+.shop-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 1rem;
+}
+
+/* Product Card */
+.shop-card {
+  background: #252533;
+  border-radius: 8px;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Image */
+.shop-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Content */
+.shop-card-content {
+  margin-top: 1rem;
+}
+
+/* Category */
+.shop-card-category {
+  font-size: 0.8rem;
+  color: #ff8c00; /* Highlight category */
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* Title */
+.shop-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: #edf2f7;
+}
+
+/* Price */
+.shop-card-price {
+  font-size: 1rem;
+  color: #00ff7f;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .shop-container {
+    gap: 1rem;  /* Ensure some spacing on smaller screens */
+  }
+
+  .shop-card-title {
+    font-size: 1rem;  /* Reduce title font size */
+  }
+
+  .shop-card-price {
+    font-size: 0.9rem;  /* Reduce price font size */
+  }
+}
+
+@media (max-width: 480px) {
+  .shop-container {
+    grid-template-columns: 1fr;  /* Single column on very small screens */
+    padding: 0.5rem;  /* Reduce padding for smaller screens */
+  }
+
+  .shop-card-title {
+    font-size: 1.1rem;  /* Adjust font size for small screens */
+  }
+
+  .shop-card-price {
+    font-size: 0.9rem;  /* Adjust price font size */
+  }
+}
+    
+
+
+
+
+
+.whatsapp-btn {
+  background-color: #25d366; /* WhatsApp green color */
+  color: white; /* Text color */
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.whatsapp-btn:hover {
+  background-color: #1ebe57; /* Darker green on hover */
+}

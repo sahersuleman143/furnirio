@@ -1,0 +1,85 @@
+/* Styles for the ProductCard component */
+.product-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px; /* Ensure it doesn't get too wide */
+  margin: auto;
+}
+
+.product-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #666;
+}
+
+.product-price {
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Make images larger and clearer */
+.product-image {
+  width: 100%;
+  max-width: 350px; /* Increased size */
+  height: 280px; /* Maintain aspect ratio */
+  object-fit: cover; /* Ensures image clarity without stretching */
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.add-to-cart-btn, .rent-on-whatsapp-btn {
+  background-color: #FFA500;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #ff8c00;
+}
+
+.rent-on-whatsapp-btn {
+  background-color: #25D366;
+}
+
+.rent-on-whatsapp-btn:hover {
+  background-color: #1ebe57;
+}
+
+.view-details {
+  background-color: #ff5722;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+.view-details:hover {
+  background-color: #e64a19;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .product-card {
+      max-width: 90%; /* More space on small screens */
+  }
+  .product-image {
+      max-width: 100%; /* Adjust image size */
+      height: auto;
+  }
+}

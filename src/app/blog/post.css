@@ -1,0 +1,22 @@
+/* Blog Post Page Styles */
+.post-section {
+    padding: 40px 10%;
+    background-color: #f9f9f9;
+  }
+  
+  .post-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .post-header h1 {
+    font-size: 36px;
+    color: #333;
+  }
+  
+  .post-content {
+    font-size: 18px;
+    color: #555;
+    line-height: 1.6;
+  }
+  

@@ -1,0 +1,147 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Title is required"
+          }
+        ],
+        "description": "The name of the product",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Slug is required"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 10
+              }
+            ],
+            "level": "error",
+            "message": "Description must be at least 10 characters"
+          }
+        ],
+        "description": "Detailed description of the product",
+        "name": "description",
+        "type": "text"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Product image is required"
+          }
+        ],
+        "description": "Upload an image of the product",
+        "name": "productImage",
+        "type": "image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error",
+            "message": "Price must be a positive value"
+          }
+        ],
+        "description": "The price of the product in your currency",
+        "name": "price",
+        "type": "number"
+      },
+      {
+        "description": "Tags to categorize the product (e.g., furniture, living room)",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "tags",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 0
+              },
+              {
+                "flag": "max",
+                "constraint": 100
+              }
+            ],
+            "level": "error",
+            "message": "Discount must be between 0 and 100"
+          }
+        ],
+        "description": "Discount percentage for this product (if applicable)",
+        "name": "discountPercentage",
+        "type": "number"
+      },
+      {
+        "description": "Mark this product as new to display a 'New' badge",
+        "name": "isNew",
+        "type": "boolean",
+        "title": "New Badge"
+      }
+    ],
+    "name": "product",
+    "type": "document"
+  }
+]
