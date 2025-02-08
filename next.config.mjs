@@ -4,14 +4,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https', // Sanity API https protocol use karti hai
-        hostname: 'cdn.sanity.io', // Sanity ka CDN domain
-        pathname: '/images/**', // Sanity ka image path
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '/images/**',
       },
     ],
-  },
-  experimental: {
-    appDir: true,
   },
   env: {
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
