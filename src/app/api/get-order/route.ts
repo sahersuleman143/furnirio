@@ -3,8 +3,8 @@ import { client } from "@/sanity/lib/client"; // Ensure this path is correct
 
 export async function GET() {
   try {
-    // Sanity query to fetch orders
-    const query = `*[_type == "order"] | order(_createdAt desc) { 
+    // ✅ Corrected Sanity Query
+    const query = `*[_type == "order"] | order(_createdAt desc) {
       _id,
       customerName,
       shippingAddress,
