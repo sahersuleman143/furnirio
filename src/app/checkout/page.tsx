@@ -6,6 +6,13 @@ import { useCart } from "../../contexts/CartContext";
 import { client } from "@/sanity/lib/client";
 import "./checkout.css";
 
+// ✅ CartItem ka type define kiya
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
 const CheckoutPage = () => {
   const { cart, clearCart } = useCart();
   const [isClient, setIsClient] = useState(false);
@@ -28,7 +35,8 @@ const CheckoutPage = () => {
     return null;
   }
 
-  const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  // ✅ TypeScript Error Fixed (Added number type for acc)
+  const totalAmount = cart.reduce((acc: number, item: CartItem) => acc + item.price * item.quantity, 0);
 
   // ✅ Input change handler fix kiya
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,11 +55,6 @@ const CheckoutPage = () => {
     }
 
     try {
-      if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || !process.env.SANITY_API_TOKEN) {
-        alert("Error: Sanity credentials are missing.");
-        return;
-      }
-
       const orderData = {
         _type: "order",
         customerName: formData.fullName,
@@ -60,7 +63,7 @@ const CheckoutPage = () => {
         postalCode: formData.postalCode,
         phone: formData.phone,
         email: formData.email,
-        cartItems: cart.map(item => ({
+        cartItems: cart.map((item: CartItem) => ({
           name: item.name,
           price: item.price,
           quantity: item.quantity,
@@ -86,7 +89,7 @@ const CheckoutPage = () => {
         <h2>Your Cart Items:</h2>
         {cart.length > 0 ? (
           <ul>
-            {cart.map((item, index) => (
+            {cart.map((item: CartItem, index: number) => (
               <li key={index} className="cart-item">
                 {item.name} - ${item.price} x {item.quantity}
               </li>
