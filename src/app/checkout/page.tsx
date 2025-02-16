@@ -1,23 +1,23 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { useCart } from '../../contexts/CartContext';
-import { client } from '@/sanity/lib/client';
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useCart } from "../../contexts/CartContext";
+import { client } from "@/sanity/lib/client";
 import "./checkout.css";
 
 const CheckoutPage = () => {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    fullName: '',
-    address: '',
-    city: '',
-    postalCode: '',
-    phone: '',
-    email: '',
+    fullName: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    phone: "",
+    email: "",
   });
 
   useEffect(() => {
@@ -28,42 +28,53 @@ const CheckoutPage = () => {
     return null;
   }
 
-  // ✅ Fix: Explicitly define the type of acc as a number
-  const totalAmount = cart.reduce((acc: number, item: { price: number; quantity: number; }) => acc + item.price * item.quantity, 0);
+  const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  // ✅ Input change handler fix kiya
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ✅ Form validation
+  const isFormValid = () => {
+    return Object.values(formData).every(value => value.trim() !== "");
+  };
+
   const handlePlaceOrder = async () => {
+    if (!isFormValid()) {
+      alert("Please fill all the fields.");
+      return;
+    }
+
     try {
-      if (!process.env.SANITY_API_TOKEN) {
-        alert("Error: Sanity API token is missing. Please check your .env.local file.");
+      if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || !process.env.SANITY_API_TOKEN) {
+        alert("Error: Sanity credentials are missing.");
         return;
       }
 
       const orderData = {
-        _type: 'order',
+        _type: "order",
         customerName: formData.fullName,
         shippingAddress: formData.address,
         city: formData.city,
         postalCode: formData.postalCode,
         phone: formData.phone,
         email: formData.email,
-        cartItems: cart.map((item: { name: any; price: any; quantity: any; }) => ({
+        cartItems: cart.map(item => ({
           name: item.name,
           price: item.price,
           quantity: item.quantity,
         })),
         totalAmount,
+        createdAt: new Date().toISOString(),
       };
 
-      const response = await client.create(orderData);
-      console.log("Order placed successfully:", response);
-      router.push('/thank-you');
+      await client.create(orderData);
+      clearCart(); // ✅ Order hone ke baad cart clear karna
+      router.push("/thank-you");
     } catch (error) {
       console.error("Order placement failed:", error);
-      alert("Order placement failed. Please check console logs for details.");
+      alert("Order placement failed. Please try again.");
     }
   };
 
@@ -75,7 +86,7 @@ const CheckoutPage = () => {
         <h2>Your Cart Items:</h2>
         {cart.length > 0 ? (
           <ul>
-            {cart.map((item: { name: string; price: number; quantity: number }, index) => (
+            {cart.map((item, index) => (
               <li key={index} className="cart-item">
                 {item.name} - ${item.price} x {item.quantity}
               </li>
@@ -92,19 +103,21 @@ const CheckoutPage = () => {
 
       <div className="shipping-info">
         <h3>Shipping Information:</h3>
-        <input type="text" name="fullName" placeholder="Full Name" onChange={handleInputChange} required />
-        <input type="text" name="address" placeholder="Address" onChange={handleInputChange} required />
-        <input type="text" name="city" placeholder="City" onChange={handleInputChange} required />
-        <input type="text" name="postalCode" placeholder="Postal Code" onChange={handleInputChange} required />
-        <input type="text" name="phone" placeholder="Phone Number" onChange={handleInputChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleInputChange} required />
+        <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleInputChange} required />
+        <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleInputChange} required />
+        <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleInputChange} required />
+        <input type="text" name="postalCode" placeholder="Postal Code" value={formData.postalCode} onChange={handleInputChange} required />
+        <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleInputChange} required />
+        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} required />
       </div>
 
       <button className="place-order-btn" onClick={handlePlaceOrder}>
         Place Order
       </button>
 
-      <button className="go-home-btn" onClick={() => router.push('/')}>Go to Home</button>
+      <button className="go-home-btn" onClick={() => router.push("/")}>
+        Go to Home
+      </button>
     </div>
   );
 };

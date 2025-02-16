@@ -2,14 +2,15 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-// Cart item ka type define karein
+// ✅ Cart item ka type define karein
 type CartItem = {
+  id: string; // 🔥 ID add kiya
   name: string;
   price: number;
   quantity: number;
 };
 
-// Cart context ko create karein
+// ✅ Cart context create karein
 export const CartContext = createContext<any>(null);
 
 // ✅ Props ke liye type define karein
@@ -33,11 +34,11 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  // Cart mein item add karne ka function
+  // ✅ Cart mein item add karne ka function
   const addToCart = (item: CartItem) => {
     setCart((prevCart) => {
       const existingProductIndex = prevCart.findIndex(
-        (cartItem) => cartItem.name === item.name
+        (cartItem) => cartItem.id === item.id
       );
 
       if (existingProductIndex >= 0) {
@@ -50,20 +51,27 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
-  // Cart ko clear karne ka function
+  // ✅ Cart se item remove karne ka function
+  const removeFromCart = (id: string) => {
+    const updatedCart = cart.filter((item) => item.id !== id);
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  // ✅ Cart ko clear karne ka function
   const clearCart = () => {
     setCart([]);
-    localStorage.removeItem("cart"); // ✅ LocalStorage ko bhi clear karein
+    localStorage.removeItem("cart");
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-// useCart hook define karein
+// ✅ useCart hook define karein
 export const useCart = () => {
   return useContext(CartContext);
 };

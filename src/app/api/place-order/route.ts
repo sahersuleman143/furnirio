@@ -1,45 +1,31 @@
 import { NextResponse } from "next/server";
-import sanityClient from "@sanity/client";
+import { client } from "@/sanity/lib/client";
 
-const client = sanityClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  useCdn: false,
-  token: process.env.SANITY_API_TOKEN, // Secret Token for Writing Data
-});
-
-export async function POST(req: Request) {
+export async function POST(req: { json: () => PromiseLike<{ customerName: any; email: any; phone: any; shippingAddress: any; city: any; postalCode: any; cartItems: any; totalAmount: any; }> | { customerName: any; email: any; phone: any; shippingAddress: any; city: any; postalCode: any; cartItems: any; totalAmount: any; }; }) {
   try {
-    const { name, email, items, total } = await req.json();
+    const { customerName, email, phone, shippingAddress, city, postalCode, cartItems, totalAmount } = await req.json();
 
-    if (!name || !email || !items || !total) {
-      return NextResponse.json(
-        { success: false, message: "All fields are required." },
-        { status: 400 }
-      );
+    // ✅ Validate Required Fields
+    if (!customerName || !email || !phone || !shippingAddress || !city || !postalCode || !cartItems.length || !totalAmount) {
+      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
-    const newOrder = {
+    // ✅ Create Order in Sanity
+    const newOrder = await client.create({
       _type: "order",
-      name,
+      customerName,
       email,
-      items,
-      total,
-      createdAt: new Date().toISOString(),
-    };
-
-    const response = await client.create(newOrder);
-
-    return NextResponse.json({
-      success: true,
-      message: "Order placed successfully",
-      orderId: response._id,
+      phone,
+      shippingAddress,
+      city,
+      postalCode,
+      cartItems,
+      totalAmount,
     });
+
+    return NextResponse.json({ success: true, order: newOrder });
   } catch (error) {
     console.error("Error placing order:", error);
-    return NextResponse.json(
-      { success: false, message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
   }
 }

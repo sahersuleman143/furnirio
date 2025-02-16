@@ -1,37 +1,49 @@
-// src/app/components/Cart.tsx
-"use client"; // Add this line at the top to mark this as a client component
+"use client"; 
 
 import React from "react";
-import CartItem from "../components/CartItem";
-import { useCart } from "../../contexts/CartContext"; // Correct path se import karein
-import "../cart/cart.css"; // CSS Import
-import { useRouter } from 'next/navigation'; // Import useRouter
+import CartItem from "./CartItem";
+import { useCart } from "../../contexts/CartContext"; // ✅ Correct import path
+import "../cart/cart.css"; // ✅ CSS Import
+import { useRouter } from 'next/navigation'; // ✅ Router import
 
 const Cart: React.FC = () => {
-  const { cart, addToCart, clearCart } = useCart(); // useCart ko use karein
-  const router = useRouter(); // useRouter hook ko initialize karein
+  const { cart, removeFromCart, clearCart } = useCart(); // ✅ removeFromCart add kiya
+  const router = useRouter(); 
 
-  // Handle Checkout Button Click
+  // ✅ Checkout button handler
   const handleProceedToCheckout = () => {
-    router.push("/checkout"); // Checkout page par navigate karein
+    router.push("/checkout"); 
   };
 
   return (
     <div className="cart-container">
       <h2 className="cart-title">Your Shopping Cart</h2>
       <div className="cart-items">
-        {cart.map((item: { name: string; price: number; quantity: number; }, index: React.Key | null | undefined) => (
-          <CartItem
-            key={index}
-            name={item.name}
-            price={item.price}
-            quantity={item.quantity}
-          />
-        ))}
+        {cart.length > 0 ? (
+          cart.map((item) => (
+            <CartItem
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              price={item.price}
+              quantity={item.quantity}
+              onRemove={removeFromCart} // ✅ Remove button ke liye function pass kiya
+            />
+          ))
+        ) : (
+          <p>No items in cart.</p>
+        )}
       </div>
+
       <div className="cart-summary">
-        <p>Total: ${cart.reduce((acc: number, item: { price: number; quantity: number; }) => acc + item.price * item.quantity, 0)}</p>
-        <button className="checkout-btn" onClick={handleProceedToCheckout}>Proceed to Checkout</button>
+        <p>Total: ${cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</p>
+        
+        {cart.length > 0 && (
+          <>
+            <button className="checkout-btn" onClick={handleProceedToCheckout}>Proceed to Checkout</button>
+            <button className="clear-cart-btn" onClick={clearCart}>Clear Cart</button>
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,37 +1,9 @@
-import { createClient } from "next-sanity";
-
-if (!process.env.SANITY_API_TOKEN) {
-  console.error("❌ Error: SANITY_API_TOKEN is missing. Make sure to set it in .env.local");
-} else {
-  console.log("✅ SANITY_API_TOKEN is available");
-}
+import { createClient } from "@sanity/client";
 
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "nwqdwao6",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-  apiVersion: "2024-02-07",
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID, // ✅ .env.local se value le raha hai
+  dataset: "production",
   useCdn: false,
-  token: process.env.SANITY_API_TOKEN, 
+  apiVersion: "2024-01-01",
+  token: process.env.SANITY_API_TOKEN, // Server-side ke liye
 });
-
-export async function sanityFetch({ query, params = {} }: { query: string; params?: any }) {
-  return await client.fetch(query, params);
-}
-
-export async function createOrder(orderData: any) {
-  try {
-    const response = await client.create(orderData);
-    console.log("✅ Order created successfully:", response);
-    return response;
-  } catch (error) {
-    console.error("❌ Error creating order:", error);
-    throw error;
-  }
-}
-
-// Debugging
-console.log("🔍 Debugging Environment Variables:");
-console.log("Project ID:", process.env.NEXT_PUBLIC_SANITY_PROJECT_ID);
-console.log("Dataset:", process.env.NEXT_PUBLIC_SANITY_DATASET);
-console.log("Sanity Token:", process.env.SANITY_API_TOKEN ? "✅ Loaded" : "❌ Missing");
-console.log("🔍 Debugging ENV:", process.env);
